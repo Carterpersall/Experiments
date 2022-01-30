@@ -1,0 +1,9 @@
+Hide-WindowsUpdate -KBArticleID KB4017094
+Hide-WindowsUpdate -KBArticleID KB4013867
+Hide-WindowsUpdate -KBArticleID KB3193713
+Hide-WindowsUpdate -KBArticleID KB3182373
+Hide-WindowsUpdate -KBArticleID KB3162593
+Hide-WindowsUpdate -KBArticleID KB3126036
+Hide-WindowsUpdate -KBArticleID KB3106614
+Hide-WindowsUpdate -KBArticleID KB3080333
+Hide-WindowsUpdate -KBArticleID KB3056819
