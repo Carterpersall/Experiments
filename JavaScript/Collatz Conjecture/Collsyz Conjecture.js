@@ -17,7 +17,6 @@ if(number == 'auto') {
             topOpNum = num;
         }
         num++;
-        operations = 0;
     }
     console.log(`The longest chain is ${topOpNum} with ${topOps} operations`);
 }else{
