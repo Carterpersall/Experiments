@@ -1,3 +1,11 @@
+#Prompts
+
+$in = Read-Host -Prompt "Enter the first number"
+$in2 = Read-Host -Prompt "Enter the second number"
+$op = Read-Host -Prompt "Enter the operator(+,-,*,/,^)"
+
+#Functions
+
 function Add{
     param($a, $b) # Inputs
 
@@ -18,20 +26,38 @@ function Add{
         }
     }
 
+    $carry = 0
+
     for ($i = 0; ($i -lt $a.length) -or ($i -lt $b.length); $i++) {
-        # Verbose 
         <#
-        $Vans = [int][char]::GetNumericValue($a[$i]) + [int][char]::GetNumericValue($b[$i])
+        # Verbose 
+        $Vans = [int][char]::GetNumericValue($a[$i]) + [int][char]::GetNumericValue($b[$i]) + $carry
         $Va = [int][char]::GetNumericValue($a[$i])
         $Vb = [int][char]::GetNumericValue($b[$i])
-        Write-Host "$Va + $Vb = $Vans"
+        Write-Host "$Va + $Vb + $carry = $Vans"
         #>
-
         # Adds Values by converting char to int, then converts the result to a string, then back to a char array
-        $d += ([int][char]::GetNumericValue($a[$i]) + [int][char]::GetNumericValue($b[$i])).ToString() -split ''
+        $char = ([int][char]::GetNumericValue($a[$i]) + [int][char]::GetNumericValue($b[$i]) + $carry).ToString() -split ''
+
+        if ($char.length -eq '4'){
+            $carry = 1
+            $doneChar = $char[2]
+        }else{
+            $carry = 0
+            $doneChar = $char
+        }
+        $out += $doneChar
     }
-    [array]::Reverse($d)
-    return -join $d
+    
+    [array]::Reverse($out)
+    $return = $out.Split('',[System.StringSplitOptions]::RemoveEmptyEntries)
+    return -join $return
 }
-$out = Add "1234" "12"
-Write-Host $out
+
+#Formatting and Outputs
+
+if($op -eq "+"){
+    $result = Add $in $in2
+}
+
+Write-Host $result
