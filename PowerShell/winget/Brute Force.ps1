@@ -14,11 +14,12 @@ foreach($a in $validChars){
                                                 foreach($m in $validChars){
                                                     foreach($n in $validChars){
                                                         $searchTerm = $a+$b+$c+$d+$e+$f+$g+$h+$i+$j+$k+$l+$m+$n
-                                                        Write-Host $searchTerm
+                                                        #Write-Host $searchTerm #Slow
                                                     }
                                                 }
                                             }
                                         }
+                                        Write-Host $searchTerm #Fast
                                     }
                                 }
                             }
