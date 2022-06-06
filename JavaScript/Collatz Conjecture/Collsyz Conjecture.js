@@ -9,7 +9,7 @@ if(number == 'auto') {
     let topOps = 0;
     let topOpNum = 0;
     let reportInterval = prompt('Please enter report interval:');
-    while(num != max + 1){
+    while(num != max){
         operations = processNum(num);
         if(num % reportInterval == 0){console.log(`Number:${num} - Ops:${operations}`);}
         if(operations > topOps){
