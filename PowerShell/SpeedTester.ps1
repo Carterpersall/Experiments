@@ -16,11 +16,21 @@ param(
 # Array of all times
 [System.Collections.ArrayList]$AllTimes = @()
 
+# Array of average time history
+[System.Collections.ArrayList]$AverageTimes = @()
+
 # Total execution time of the scriptblock
 $TotalTime = 0
 
 # Current iteration
 $CurrentIteration = 0
+
+
+### Import ###
+
+# Graph Maker
+#Install-Module Graphical
+Import-Module Graphical
 
 
 ### Execution ###
@@ -63,6 +73,8 @@ Write-Host "Getting speed of scriptblock $Iterations times"
         $TotalTime += $_
         Write-Progress -Activity "Execution Progress" -Status "Iteration $CurrentIteration" -PercentComplete ($CurrentIteration / $Iterations * 100) -Id 1
         $AverageTime = $TotalTime / $CurrentIteration
+        [void]($AverageTimes.Add($AverageTime * 10000000)) # In ticks
+        Show-Graph -Datapoints $AverageTimes -XAxisTitle "Iteration" -YAxisTitle "Time (Ticks)" -GraphTitle "Average Time" -XAxisStep 10 -YAxisStep 100 -WarningAction SilentlyContinue
         Write-Progress -Activity "Average Time: $([int]($AverageTime * 1e4) / 1e4)" -Status "Previous Time: $_" -PercentComplete $($AverageTime / ($AllTimes | Sort-Object -Descending)[0] * 100) -Id 2
     }
 }
