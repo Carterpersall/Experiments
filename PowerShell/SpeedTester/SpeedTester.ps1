@@ -29,8 +29,7 @@ $CurrentIteration = 0
 ### Import ###
 
 # Graph Maker
-#Install-Module Graphical
-Import-Module Graphical
+Import-Module .\Graphical
 
 
 ### Execution ###
