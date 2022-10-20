@@ -1,16 +1,10 @@
 # Based on script at https://gist.github.com/alkampfergit/19f89c1a93cc1e7b9ec9bf501f2b9134
 
-# Get current encoding
-$Encoding = ([Console]::OutputEncoding).CodePage
-
 # Winget uses UTF8 encoding, so the console default has to be set to it for artifacting not to occur in the output
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
 
 # Run Winget command and cast to an array of strings
 $Lines = [String[]](winget upgrade)
-
-# Revert back to original encoding
-[Console]::OutputEncoding = [System.Text.Encoding]::GetEncoding($Encoding)
 
 # Find the header line
 $header = ($lines[0..5] -replace " ").IndexOf("NameIdVersionAvailableSource")
