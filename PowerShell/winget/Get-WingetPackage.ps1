@@ -125,7 +125,7 @@ PROCESS {
         "list"
         "--accept-source-agreements"
     )
-    $__boundparms = $PSBoundParameters
+    #$__boundparms = $PSBoundParameters
     $MyInvocation.MyCommand.Parameters.Values.Where({$_.SwitchParameter -and $_.Name -notmatch "Debug|Whatif|Confirm|Verbose" -and ! $PSBoundParameters[$_.Name]}).ForEach({$PSBoundParameters[$_.Name] = [switch]::new($false)})
     if ($PSBoundParameters["Debug"]){wait-debugger}
     foreach ($paramName in $PSBoundParameters.Keys|Sort-Object {$__PARAMETERMAP[$_].OriginalPosition}) {
