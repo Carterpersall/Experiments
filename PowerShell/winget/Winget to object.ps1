@@ -18,7 +18,7 @@ param (
     [String]$Search,
 
     [Parameter(ParameterSetName = "Show Command")]
-    [String]$Show # TODO: Implement this
+    [String]$Show
 )
 
 # Winget uses UTF8 encoding, so the console default has to be set to it for artifacting not to occur in the output
@@ -43,10 +43,16 @@ $Lines = if ($List) {
     (winget show $Show)
 }
 
+# TODO: Fix problems when index refreshes
 if ($Show) {
+    # If the first line with content starts with Multiple, then multiple packages were found matching the query and a search was returned
     if ($Lines[1].StartsWith("Multiple")) {
         Write-Information "Multiple packages found matching '$Show'."
+        
+        # Remove the first two lines, which is the empty line and the "Multiple packages found" message
         $Lines = $Lines[1..$Lines.Length]
+
+        # Set $Show to Null so the next if-statement parses the search results
         $Show = $null
     }else {
         # Create PSObject to hold the data
@@ -72,9 +78,16 @@ if ($Show) {
                 $Output.Add($Segments[0], $Segments[1].Trim())
             }else {
                 # If the line is indented, it is one of multiple values for the previously stored property
-                if ($Line.Contains(":")) {
 
+                # If the line has a colon, it is a property of the previously stored property
+                if ($Line.Contains(":")) {
+                    # If $Output[$Segments[0]] is not a PSObject, create one
+                    if (!$Output[$Segments[0]]) {$Output[$Segments[0]] = @{}}
+
+                    # Split the line into two parts, the property name and the property value
+                    $Output[$Segments[0]].Add($Line.SubString(0, $Line.IndexOf(":")).Trim(), $Line.SubString($Line.IndexOf(":") + 1).Trim())
                 }else {
+                    # If the line does not have a colon, it is a value for the previously stored property
                     $Output[$Segments[0]] += "`n$($Line.Trim())"
                 }
             }
@@ -84,7 +97,7 @@ if ($Show) {
 
 if (!$Show) {
     # Create arraylist to hold the objects
-    [ArrayList]$Output = @()
+    [System.Collections.ArrayList]$Output = @()
 
     # Find the header line
     $header = ($lines[0..5] -replace " ").IndexOf("NameIdVersionAvailableSource")
