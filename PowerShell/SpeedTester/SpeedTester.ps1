@@ -10,7 +10,9 @@ param(
     # Scriptblock to execute
     [scriptblock]$ScriptBlock = {},
     # Unit of time to use
-    [String]$Unit = "Seconds"
+    [String]$Unit = "Seconds",
+    # Use graphs
+    [switch]$Graph
 )
 
 # Array of all times
@@ -29,7 +31,7 @@ $CurrentIteration = 0
 ### Import ###
 
 # Graph Maker
-Import-Module .\Graphical
+if ($Graph) {Import-Module .\Graphical}
 
 
 ### Execution ###
@@ -73,7 +75,7 @@ Write-Host "Getting speed of scriptblock $Iterations times"
         Write-Progress -Activity "Execution Progress" -Status "Iteration $CurrentIteration" -PercentComplete ($CurrentIteration / $Iterations * 100) -Id 1
         $AverageTime = $TotalTime / $CurrentIteration
         [void]($AverageTimes.Add($AverageTime * 10000000)) # In ticks
-        Show-Graph -Datapoints $AverageTimes -XAxisTitle "Iteration" -YAxisTitle "Time (Ticks)" -GraphTitle "Average Time" -XAxisStep 10 -YAxisStep 100 -WarningAction SilentlyContinue
+        if ($Graph) {Show-Graph -Datapoints $AverageTimes -XAxisTitle "Iteration" -YAxisTitle "Time (Ticks)" -GraphTitle "Average Time" -XAxisStep 10 -YAxisStep 100 -WarningAction SilentlyContinue}
         Write-Progress -Activity "Average Time: $([int]($AverageTime * 1e4) / 1e4)" -Status "Previous Time: $_" -PercentComplete $($AverageTime / ($AllTimes | Sort-Object -Descending)[0] * 100) -Id 2
     }
 }
